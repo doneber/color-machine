@@ -1,6 +1,6 @@
 const btnGen = document.querySelector('#color-generator')
-const color = document.querySelector('#color')
-const colorCode = document.querySelector('#color-code')
+
+const container = document.querySelector('.container')
 
 function randomHexNumber(){
   const num = parseInt(Math.random()*16)
@@ -17,8 +17,30 @@ function randonHexColor(){
   return nuevoColor
 }
 
+let refNode = null
 btnGen.addEventListener('click', ()=>{
+  // Genera un nuevo color en HEX
   const newColor = randonHexColor()
-  color.style.background = newColor
-  colorCode.textContent = newColor
+  // Creando una seccion para el nuevo Color
+  const nuevaSeccionColor = document.createElement('div')
+  nuevaSeccionColor.classList.add('color-generated-section')
+  nuevaSeccionColor.innerHTML = `
+          <div class="color" style="background-color: ${newColor}"></div>
+      <div class="color-code">${newColor}</div>
+  `
+  // El boton para copiar
+    const btnCopiar = document.createElement('button')
+    btnCopiar.textContent = "Copiar"
+  // Le agregamos al boton en escuchador del evento Click 
+  btnCopiar.addEventListener('click',()=>{
+    const copyText = document.querySelector('#copy-text-container')
+    copyText.innerHTML = "<span class='desaparecer'>Copiado!</span>"
+     navigator.clipboard.writeText(newColor);
+  })
+  // Agregamos el boton a la seccion del Nuevo Color
+  nuevaSeccionColor.appendChild(btnCopiar)
+  
+  // Agregando la nueva seccion del color al contenedor
+  container.insertBefore(nuevaSeccionColor,refNode)
+  refNode = nuevaSeccionColor
 })
